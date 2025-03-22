@@ -1,0 +1,36 @@
+{
+    "compilerOptions": 
+    {
+
+        //
+        //  Versão para qual o ts será compilado
+        //
+        "target": "ES6", 
+        
+        //
+        //  Sistema de módulos do CommonJS 
+        //  (código usará require para importar e module.exports para exportar)
+        //
+        "module": "commonjs",
+
+        //
+        //  Habilita a interoperabilidade entre módulos ES6 e CommonJS.
+        //
+        "esModuleInterop": true,
+
+        //
+        //  Ativa todas as verificações de tipo estritas no TypeScript.
+        //
+        "strict": true,
+
+        //
+        //  Desativa a verificação de tipos de arquivos de definição de bibliotecas (.d.ts).
+        //
+        "skipLibCheck": true,
+
+        //
+        //  Garante que os nomes dos arquivos sejam consistentes em termos de maiúsculas e minúsculas.
+        //
+        "forceConsistentCasingInFileNames": true
+    }
+}
