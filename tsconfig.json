@@ -5,7 +5,7 @@
         //
         //  Versão para qual o ts será compilado
         //
-        "target": "ES6", 
+        "target": "ES2017", 
         
         //
         //  Sistema de módulos do CommonJS 
@@ -31,6 +31,19 @@
         //
         //  Garante que os nomes dos arquivos sejam consistentes em termos de maiúsculas e minúsculas.
         //
-        "forceConsistentCasingInFileNames": true
-    }
+        "forceConsistentCasingInFileNames": true,
+
+        //
+        //  Caminho para saída de arquivos compilados em js
+        //
+        "outDir" : "./dist"
+    },
+
+    "include": [
+    "src/**/*.ts",
+    ],
+
+    "exclude": [
+    "node_modules"
+    ]
 }
