@@ -1,6 +1,6 @@
 import * as winston from 'winston';
 
-class Logger
+export class Logger
 {
     private log_filepath: string = "";
     private log_level: string = "";
@@ -42,5 +42,3 @@ class Logger
         return this.logger;
     }
 }
-
-export default Logger;

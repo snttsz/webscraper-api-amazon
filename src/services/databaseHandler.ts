@@ -1,14 +1,10 @@
 import { DynamoDB } from 'aws-sdk';
 
-import * as dotenv from 'dotenv';
-
 import { CategoriaDAO, Categoria } from '../DAO/categoriaDAO';
 import { DepartamentoDAO, Departamento } from '../DAO/departamentoDAO';
 import { ProdutoDAO, Produto } from '../DAO/produtoDAO';
 
-dotenv.config();
-
-export class DynamoDBApi
+export class DatabaseHandler
 {
     private categoriaDAO : CategoriaDAO | null = null;
     private departamentoDAO : DepartamentoDAO | null = null;
@@ -59,7 +55,7 @@ export class DynamoDBApi
      * @param 
      * @returns 
      */
-    public getDepartamentoTable() : CategoriaDAO | null
+    public getDepartamentoTable() : DepartamentoDAO | null
     {
         return this.departamentoDAO;
     }
@@ -71,29 +67,50 @@ export class DynamoDBApi
      * @param 
      * @returns 
      */
-    public converter_para_lista_de_categorias(lista: string[]) : Categoria[]
+    public parseCategorias(lista: string[]) : Categoria[]
     {
+        return lista.map(item => {
+            const [href, nome, id] = item.split(":::");
+            return { id, nome, href };
+        });
     }
 
-    /**
-     * 
-     * 
-     * @param
-     * @param 
-     * @returns 
-     */
-    public converter_para_lista_de_produtos(lista: string[]) : Produto[]
+    // /**
+    //  * 
+    //  * 
+    //  * @param
+    //  * @param 
+    //  * @returns 
+    //  */
+    public parseProdutos(lista: string[]) : Produto[]
     {
+        return lista.map(item => {
+            const [id, nome, preco, estrelas, num_avaliacoes, tipo_tabela_pai, id_tabela_pai] = item.split(":::");
+            
+            return { 
+                id, 
+                nome, 
+                preco, 
+                estrelas, 
+                num_avaliacoes, 
+                tipo_tabela_pai, 
+                id_tabela_pai : id_tabela_pai !== "null" ? id_tabela_pai : "Página Inicial - Sem ID"
+            };
+        });
     }
 
-    /**
-     * 
-     * 
-     * @param
-     * @param 
-     * @returns 
-     */
-    public converter_para_lista_de_departamentos(lista: string[]) : Departamento[]
+    // /**
+    //  * 
+    //  * 
+    //  * @param
+    //  * @param 
+    //  * @returns 
+    //  */
+    public parseDepartamentos(lista: string[]) : Departamento[]
     {
+        return lista.map(item => {
+            const [href, nome, id] = item.split(":::");
+            return { id, nome, href };
+        });
     }
 }

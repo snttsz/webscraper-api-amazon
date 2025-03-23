@@ -1,0 +1,13 @@
+Disponibilizar mais vendidos
+
+-> Listar departamentos /listarDepartamentos
+	-> Listar categorias dentro do departamento /listarDepartamentos/categorias
+	
+-> Listar 3 mais vendidos no geral /listarMaisVendidos
+	-> Listar 3 mais vendidos departamento especifico listarMaisVendidos/departamento
+	-> Listar 3 mais vendidos na categoria do departamento listarMaisVendidos/departamento/categoria
+	-> Listar mais vendidos no geral com quantidade /listarMaisVendidos/qtd=x
+	-> Listar mais vendidos departamento especifico com quantidade listarMaisVendidos/departamento/qtd=x
+	-> Listar mais vendidos na categoria do departamento com quantidade listarMaisVendidos/departamento/categoria/qtd=x
+
+qtd_maxima = 100

@@ -2,12 +2,22 @@
 import { DAO } from './DAO';
 import { DynamoDB } from 'aws-sdk';
 
+export enum PastaPai
+{
+    PAGINA_INICIAL = "Página Inicial",
+    DEPARTAMENTO = "Departamento",
+    CATEGORIA = "Categoria"
+}
+
 export interface Produto
 {
     id : string,
     nome : string,
     preco : string,
-    estrelas : string
+    estrelas : string,
+    num_avaliacoes : string,
+    tipo_tabela_pai : string,
+    id_tabela_pai : string
 };
 
 export class ProdutoDAO extends DAO<Produto>
@@ -74,18 +84,24 @@ export class ProdutoDAO extends DAO<Produto>
             
             Key: { id },
             
-            UpdateExpression: 'set #nome = :nome, #preco = :preco, #estrelas = :estrelas',
+            UpdateExpression: 'set #nome = :nome, #preco = :preco, #estrelas = :estrelas, #num_avaliacoes = :num_avaliacoes, #tipo_tabela_pai = :tipo_tabela_pai, #id_tabela_pai = :id_tabela_pai',
             
             ExpressionAttributeNames: {
                 '#nome': 'nome',
                 '#preco': 'preco',
-                '#estrelas' : 'estrelas'
+                '#estrelas' : 'estrelas',
+                '#tipo_tabela_pai' : 'tipo_tabela_pai',
+                '#id_tabela_pai' : 'id_tabela_pai',
+                '#num_avaliacoes' : 'num_avaliacoes'
             }, 
             
             ExpressionAttributeValues: {
                 ':nome': updatedProduct.nome,
                 ':preco': updatedProduct.preco,
-                ':estrelas': updatedProduct.estrelas
+                ':estrelas': updatedProduct.estrelas,
+                ':num_avaliacoes' : updatedProduct.num_avaliacoes,
+                ':tipo_tabela_pai' : updatedProduct.tipo_tabela_pai,
+                ':id_tabela_pai' : updatedProduct.id_tabela_pai 
             }
         };
 
