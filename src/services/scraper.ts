@@ -164,7 +164,7 @@ export class AmazonScraper
      * @param url URL da página de início.
      * @returns Lista de produtos encontrados na página inicial.
      */
-    public async scrape_pagina_inicial(url: string) : Promise<string[]>
+    public async scrapePaginaInicial(url: string) : Promise<string[]>
     {
         if (!this.page)
         {
@@ -184,7 +184,7 @@ export class AmazonScraper
      * @param tipo_tabela Tipo de tabela pai (página inicial ou departamento).
      * @returns Lista de produtos encontrados nas páginas redirecionadas.
      */
-    public async scrape_paginas_redirecionadas(lista_com_links: string[], id_do_link: string, tipo_tabela: string) : Promise<string[]>
+    public async scrapePaginasRedirecionadas(lista_com_links: string[], id_do_link: string, tipo_tabela: string) : Promise<string[]>
     {
         if (!this.page)
         {

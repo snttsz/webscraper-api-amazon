@@ -32,7 +32,7 @@ export class DepartamentoDAO extends DAO<Departamento>
      * @param departamento Objeto do tipo Departamento a ser adicionado.
      * @returns Promise<void> indicando a conclusão da operação.
      */
-    async create(departamento: Departamento): Promise<void> 
+    async criar(departamento: Departamento): Promise<void> 
     {
         try
         {
@@ -45,11 +45,11 @@ export class DepartamentoDAO extends DAO<Departamento>
 
             this.ultimo_id += 1;
 
-            this.log.get_logger().info(`[DepartamentoDAO] create() -> Departamento ${departamento.nome} adicionado com sucesso`);
+            this.log.getLogger().info(`[DepartamentoDAO] create() -> Departamento ${departamento.nome} adicionado com sucesso`);
         }
         catch (error : any)
         {
-            this.log.get_logger().error(`[DepartamentoDAO] create() -> Ocorreu um erro ao adicionar o ${departamento.nome}: ${error}`)
+            this.log.getLogger().error(`[DepartamentoDAO] create() -> Ocorreu um erro ao adicionar o ${departamento.nome}: ${error}`)
         }
     }
 
@@ -59,7 +59,7 @@ export class DepartamentoDAO extends DAO<Departamento>
      * @param updatedDepartment Objeto contendo os novos dados do departamento.
      * @returns Promise<void> indicando a conclusão da operação.
      */
-    async update(id: string, updatedDepartment: Departamento): Promise<void> 
+    async atualizar(id: string, updatedDepartment: Departamento): Promise<void> 
     {
         
         const params: DynamoDB.DocumentClient.UpdateItemInput = {

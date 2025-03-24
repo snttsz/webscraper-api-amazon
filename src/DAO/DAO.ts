@@ -25,7 +25,7 @@ export abstract class DAO<T>
         this.log = log;
 
         (async () => {
-            this.ultimo_id = (await this.list()).length;
+            this.ultimo_id = (await this.listar()).length;
         });
     }
 
@@ -41,7 +41,7 @@ export abstract class DAO<T>
      * @param 
      * @returns 
      */ 
-    async createTable() : Promise<void>
+    async criarTabela() : Promise<void>
     {
         const params: DynamoDB.CreateTableInput = 
         {
@@ -63,19 +63,19 @@ export abstract class DAO<T>
 
         try
         {
-            this.log.get_logger().info(`[DAO] createTable() -> Criando tabela ${this.tableName}...`);
+            this.log.getLogger().info(`[DAO] createTable() -> Criando tabela ${this.tableName}...`);
             await this.dynamoDBRaw.createTable(params).promise();
-            this.log.get_logger().info(`[DAO] createTable() -> Tabela ${this.tableName} criada com sucesso.`);
+            this.log.getLogger().info(`[DAO] createTable() -> Tabela ${this.tableName} criada com sucesso.`);
         }
         catch (error: any)
         {
             if (error.code === "ResourceInUseException") 
             {
-                this.log.get_logger().error(`[DAO] createTable() -> Tabela ${this.tableName} já existe.`);
+                this.log.getLogger().error(`[DAO] createTable() -> Tabela ${this.tableName} já existe.`);
             } 
             else 
             {
-                this.log.get_logger().error("[DAO] createTable() -> Erro ao criar a tabela:", error);
+                this.log.getLogger().error("[DAO] createTable() -> Erro ao criar a tabela:", error);
             }
         }
     }
@@ -87,7 +87,7 @@ export abstract class DAO<T>
      * @param 
      * @returns 
      */
-    abstract create(item: T) : Promise<void>;
+    abstract criar(item: T) : Promise<void>;
 
     /**
      * 
@@ -96,11 +96,11 @@ export abstract class DAO<T>
      * @param 
      * @returns 
      */
-    async create_from_list(itens: T[]): Promise<void> 
+    async criarDeLista(itens: T[]): Promise<void> 
     {
         for (const item of itens)
         {
-            await this.create(item);
+            await this.criar(item);
         }
     }
 
@@ -111,7 +111,7 @@ export abstract class DAO<T>
      * @param 
      * @returns 
      */
-    async read(id: string) : Promise<T | null>
+    async ler(id: string) : Promise<T | null>
     {
         const params: DynamoDB.DocumentClient.GetItemInput = {
             TableName: this.tableName,
@@ -130,7 +130,7 @@ export abstract class DAO<T>
      * @param 
      * @returns 
      */
-    abstract update(id: string, updatedItem: T): Promise<void>;
+    abstract atualizar(id: string, updatedItem: T): Promise<void>;
 
     /**
      * 
@@ -139,7 +139,7 @@ export abstract class DAO<T>
      * @param 
      * @returns 
      */
-    async delete(id: string): Promise<void> 
+    async deletar(id: string): Promise<void> 
     {
         const params: DynamoDB.DocumentClient.DeleteItemInput = {
             TableName: this.tableName,
@@ -156,7 +156,7 @@ export abstract class DAO<T>
      * @param 
      * @returns 
      */
-    async list() : Promise<T[]>
+    async listar() : Promise<T[]>
     {
         const params : DynamoDB.DocumentClient.ScanInput = {
             TableName : this.tableName
@@ -167,10 +167,10 @@ export abstract class DAO<T>
         return result.Items as T[];
     }
 
-    async waitForTableActive(): Promise<void> 
+    async esperarTabelaEstarAtiva(): Promise<void> 
     {
-        this.log.get_logger().info(`[DynamoDB] waitForTableActive() -> Aguardando a tabela ${this.tableName} ficar ativa...`);
+        this.log.getLogger().info(`[DynamoDB] waitForTableActive() -> Aguardando a tabela ${this.tableName} ficar ativa...`);
         await this.dynamoDBRaw.waitFor('tableExists', { TableName: this.tableName }).promise();
-        this.log.get_logger().info(`[DynamoDB] waitForTableActive() -> Tabela ${this.tableName} está ativa.`);
+        this.log.getLogger().info(`[DynamoDB] waitForTableActive() -> Tabela ${this.tableName} está ativa.`);
     }
 }

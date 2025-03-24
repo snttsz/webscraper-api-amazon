@@ -63,7 +63,7 @@ export class Logger
      * 
      * @returns A instância do logger.
      */
-    public get_logger() : winston.Logger
+    public getLogger() : winston.Logger
     {
         return this.logger;
     }

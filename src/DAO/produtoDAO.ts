@@ -45,7 +45,7 @@ export class ProdutoDAO extends DAO<Produto>
      * Cria um novo produto e o adiciona ao banco de dados.
      * @param produto Objeto do tipo Produto a ser adicionado.
      */
-    async create(produto: Produto): Promise<void> 
+    async criar(produto: Produto): Promise<void> 
     {
         try
         {
@@ -60,11 +60,11 @@ export class ProdutoDAO extends DAO<Produto>
 
             this.ultimo_id += 1;
             
-            this.log.get_logger().info(`[ProdutoDAO] create() -> Produto ${produto.nome} adicionado com sucesso`);
+            this.log.getLogger().info(`[ProdutoDAO] create() -> Produto ${produto.nome} adicionado com sucesso`);
         }
         catch (error : any)
         {
-            this.log.get_logger().error(`[ProdutoDAO] create() -> Ocorreu um erro ao adicionar o ${produto.nome}: ${error}`)
+            this.log.getLogger().error(`[ProdutoDAO] create() -> Ocorreu um erro ao adicionar o ${produto.nome}: ${error}`)
         }
     }
 
@@ -73,7 +73,7 @@ export class ProdutoDAO extends DAO<Produto>
      * @param id Identificador do produto a ser atualizado.
      * @param updatedProduct Objeto contendo os novos dados do produto.
      */
-    async update(id: string, updatedProduct: Produto): Promise<void> 
+    async atualizar(id: string, updatedProduct: Produto): Promise<void> 
     {
         
         const params: DynamoDB.DocumentClient.UpdateItemInput = {
@@ -140,7 +140,7 @@ export class ProdutoDAO extends DAO<Produto>
         } 
         catch (error: any) 
         {
-            this.log.get_logger().error(`[ProdutoDAO] getProdutosByDepartamento() -> Erro ao buscar produtos para o departamento ${idDepartamento}: ${error}`);
+            this.log.getLogger().error(`[ProdutoDAO] getProdutosByDepartamento() -> Erro ao buscar produtos para o departamento ${idDepartamento}: ${error}`);
             return [];
         }
     }

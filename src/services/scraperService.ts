@@ -46,7 +46,7 @@ class ScraperService
      * 
      * @throws Se ocorrer algum erro durante o processo de raspagem ou salvamento.
      */
-    public async scrape_and_save() : Promise<void>
+    public async scrapeAndSave() : Promise<void>
     {
         if (!this.log)
         {
@@ -69,14 +69,14 @@ class ScraperService
             //
             //  Cria a tabela Produto
             //
-            await this.databaseHandler.getProdutoTable()?.createTable();
-            await this.databaseHandler.getProdutoTable()?.waitForTableActive();
+            await this.databaseHandler.getProdutoTable()?.criarTabela();
+            await this.databaseHandler.getProdutoTable()?.esperarTabelaEstarAtiva();
     
             //
             //  Cria a tabela Departamento
             //
-            await this.databaseHandler.getDepartamentoTable()?.createTable();
-            await this.databaseHandler.getDepartamentoTable()?.waitForTableActive();
+            await this.databaseHandler.getDepartamentoTable()?.criarTabela();
+            await this.databaseHandler.getDepartamentoTable()?.esperarTabelaEstarAtiva();
 
 
 
@@ -85,9 +85,9 @@ class ScraperService
             //
             //  Envia produtos da página principal para o BD
             //
-            let produtos : string[] = await this.webscraper.scrape_pagina_inicial("/bestsellers");
-            console.log(await this.databaseHandler.getProdutoTable()?.list())
-            await this.databaseHandler.getProdutoTable()?.create_from_list(this.databaseHandler.parseProdutos(produtos));
+            let produtos : string[] = await this.webscraper.scrapePaginaInicial("/bestsellers");
+            console.log(await this.databaseHandler.getProdutoTable()?.listar())
+            await this.databaseHandler.getProdutoTable()?.criarDeLista(this.databaseHandler.parseProdutos(produtos));
 
 
 
@@ -96,15 +96,15 @@ class ScraperService
             //
             let departamentos = await this.webscraper.scrape_menu_opcoes("/bestsellers");
             let departamentos_list = this.databaseHandler.parseDepartamentos(departamentos);
-            await this.databaseHandler.getDepartamentoTable()?.create_from_list(departamentos_list);
+            await this.databaseHandler.getDepartamentoTable()?.criarDeLista(departamentos_list);
 
             //
             //  Envia os 3 bestsellers do departamento para o BD
             //
             for (const departamento of departamentos_list)
             {
-                let produtos_departamento = await this.webscraper.scrape_paginas_redirecionadas(departamentos, departamento.id.toString(), PastaPai.DEPARTAMENTO);
-                await this.databaseHandler.getProdutoTable()?.create_from_list(this.databaseHandler.parseProdutos(produtos_departamento, departamento.nome));
+                let produtos_departamento = await this.webscraper.scrapePaginasRedirecionadas(departamentos, departamento.id.toString(), PastaPai.DEPARTAMENTO);
+                await this.databaseHandler.getProdutoTable()?.criarDeLista(this.databaseHandler.parseProdutos(produtos_departamento, departamento.nome));
             }
         }
         catch(error) 
@@ -126,6 +126,6 @@ if (require.main == module)
 
         let scraperService : ScraperService = new ScraperService();
 
-        scraperService.scrape_and_save();
+        scraperService.scrapeAndSave();
     })();
 }
