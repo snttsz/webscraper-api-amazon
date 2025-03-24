@@ -2,20 +2,20 @@
 import { DAO } from './DAO';
 import { DynamoDB } from 'aws-sdk';
 
+import { Logger } from '../utils/logger';
+
 export enum PastaPai
 {
     PAGINA_INICIAL = "Página Inicial",
-    DEPARTAMENTO = "Departamento",
-    CATEGORIA = "Categoria"
+    DEPARTAMENTO = "Departamento"
 }
 
 export interface Produto
 {
-    id : string,
+    id : number,
     nome : string,
     preco : string,
     estrelas : string,
-    num_avaliacoes : string,
     tipo_tabela_pai : string,
     id_tabela_pai : string
 };
@@ -29,9 +29,9 @@ export class ProdutoDAO extends DAO<Produto>
      * @param 
      * @returns 
      */
-    constructor() 
+    constructor(log: Logger) 
     {
-        super('Produto');
+        super('Produto', log);
     }
 
     /**
@@ -43,29 +43,25 @@ export class ProdutoDAO extends DAO<Produto>
      */
     async create(produto: Produto): Promise<void> 
     {
-        const params: DynamoDB.DocumentClient.PutItemInput = {
-            TableName: this.tableName,
-            Item: produto
-        };
+        try
+        {
+            produto.id = this.ultimo_id;
 
-        await this.dynamoDB.put(params).promise();
-    }
+            const params: DynamoDB.DocumentClient.PutItemInput = {
+                TableName: this.tableName,
+                Item: produto
+            };
+    
+            await this.dynamoDB.put(params).promise();
 
-    /**
-     * 
-     * 
-     * @param
-     * @param 
-     * @returns 
-     */
-    async create_from_list(produto: Produto[]): Promise<void> 
-    {
-        // const params: DynamoDB.DocumentClient.PutItemInput = {
-        //     TableName: this.tableName,
-        //     Item: produto
-        // };
-
-        // await this.dynamoDB.put(params).promise();
+            this.ultimo_id += 1;
+            
+            this.log.get_logger().info(`[ProdutoDAO] create() -> Produto ${produto.nome} adicionado com sucesso`);
+        }
+        catch (error : any)
+        {
+            this.log.get_logger().error(`[ProdutoDAO] create() -> Ocorreu um erro ao adicionar o ${produto.nome}: ${error}`)
+        }
     }
 
     /**
@@ -84,27 +80,66 @@ export class ProdutoDAO extends DAO<Produto>
             
             Key: { id },
             
-            UpdateExpression: 'set #nome = :nome, #preco = :preco, #estrelas = :estrelas, #num_avaliacoes = :num_avaliacoes, #tipo_tabela_pai = :tipo_tabela_pai, #id_tabela_pai = :id_tabela_pai',
+            UpdateExpression: 'set #nome = :nome, #preco = :preco, #estrelas = :estrelas, #tipo_tabela_pai = :tipo_tabela_pai, #id_tabela_pai = :id_tabela_pai',
             
             ExpressionAttributeNames: {
                 '#nome': 'nome',
                 '#preco': 'preco',
                 '#estrelas' : 'estrelas',
                 '#tipo_tabela_pai' : 'tipo_tabela_pai',
-                '#id_tabela_pai' : 'id_tabela_pai',
-                '#num_avaliacoes' : 'num_avaliacoes'
+                '#id_tabela_pai' : 'id_tabela_pai'
             }, 
             
             ExpressionAttributeValues: {
                 ':nome': updatedProduct.nome,
                 ':preco': updatedProduct.preco,
                 ':estrelas': updatedProduct.estrelas,
-                ':num_avaliacoes' : updatedProduct.num_avaliacoes,
                 ':tipo_tabela_pai' : updatedProduct.tipo_tabela_pai,
                 ':id_tabela_pai' : updatedProduct.id_tabela_pai 
             }
         };
 
         await this.dynamoDB.update(params).promise();
+    }
+
+    /**
+     * Retorna os produtos de um determinado departamento.
+     * 
+     * @param idDepartamento O ID do departamento para filtrar os produtos.
+     * @returns Lista de produtos do departamento.
+     */
+    async getProdutosByDepartamento(idDepartamento: string, tipoDepartamento: string): Promise<Produto[]> 
+    {
+        try 
+        {
+            if (tipoDepartamento === PastaPai.PAGINA_INICIAL)
+            {
+                idDepartamento = "Página Inicial - Sem ID";
+            }
+
+            const params: DynamoDB.DocumentClient.ScanInput = {
+                
+                TableName: this.tableName,
+                
+                FilterExpression: '#id_tabela_pai = :idDepartamento',
+                
+                ExpressionAttributeNames: {
+                    '#id_tabela_pai': 'id_tabela_pai',
+                },
+
+                ExpressionAttributeValues: {
+                    ':idDepartamento': idDepartamento,
+                },
+            };
+
+            const result = await this.dynamoDB.scan(params).promise();
+
+            return result.Items as Produto[];
+        } 
+        catch (error: any) 
+        {
+            this.log.get_logger().error(`[ProdutoDAO] getProdutosByDepartamento() -> Erro ao buscar produtos para o departamento ${idDepartamento}: ${error}`);
+            return [];
+        }
     }
 }

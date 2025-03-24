@@ -1,0 +1,35 @@
+service: webscraper-api
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: sa-east-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Scan
+      Resource: 
+        - arn:aws:dynamodb:sa-east-1:514586328604:table/Departamento
+        - arn:aws:dynamodb:sa-east-1:514586328604:table/Produto
+
+functions:
+  listarDepartamentos:
+    handler: src/apis/handler.listarDepartamentos
+    events:
+      - http:
+          path: departamentos
+          method: get
+
+  listarMaisVendidos:
+    handler: src/apis/handler.listarMaisVendidos
+    events:
+      - http:
+          path: produtos
+          method: get
+
+  listarMaisVendidosPorDepartamento:
+    handler: src/apis/handler.listarMaisVendidosPorDepartamento
+    events:
+      - http:
+          path: departamentos/{id_departamento}
+          method: get

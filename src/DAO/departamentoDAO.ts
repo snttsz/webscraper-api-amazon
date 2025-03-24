@@ -1,10 +1,11 @@
 
 import { DAO } from './DAO';
 import { DynamoDB } from 'aws-sdk';
+import { Logger } from '../utils/logger';
 
 export interface Departamento
 {
-    id : string,
+    id : number,
     nome : string,
     href : string
 };
@@ -18,9 +19,9 @@ export class DepartamentoDAO extends DAO<Departamento>
      * @param 
      * @returns 
      */
-    constructor() 
+    constructor(log: Logger) 
     {
-        super('Departamento');
+        super('Departamento', log);
     }
 
     /**
@@ -32,29 +33,23 @@ export class DepartamentoDAO extends DAO<Departamento>
      */
     async create(departamento: Departamento): Promise<void> 
     {
-        const params: DynamoDB.DocumentClient.PutItemInput = {
-            TableName: this.tableName,
-            Item: departamento
-        };
+        try
+        {
+            const params: DynamoDB.DocumentClient.PutItemInput = {
+                TableName: this.tableName,
+                Item: departamento
+            };
+    
+            await this.dynamoDB.put(params).promise();
 
-        await this.dynamoDB.put(params).promise();
-    }
+            this.ultimo_id += 1;
 
-    /**
-     * 
-     * 
-     * @param
-     * @param 
-     * @returns 
-     */
-    async create_from_list(departamento: Departamento[]): Promise<void> 
-    {
-        // const params: DynamoDB.DocumentClient.PutItemInput = {
-        //     TableName: this.tableName,
-        //     Item: departamento
-        // };
-
-        // await this.dynamoDB.put(params).promise();
+            this.log.get_logger().info(`[DepartamentoDAO] create() -> Departamento ${departamento.nome} adicionado com sucesso`);
+        }
+        catch (error : any)
+        {
+            this.log.get_logger().error(`[DepartamentoDAO] create() -> Ocorreu um erro ao adicionar o ${departamento.nome}: ${error}`)
+        }
     }
 
     /**

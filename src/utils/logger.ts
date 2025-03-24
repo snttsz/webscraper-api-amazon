@@ -1,4 +1,6 @@
 import * as winston from 'winston';
+import * as path from 'path';
+import * as fs from 'fs';
 
 export class Logger
 {
@@ -10,6 +12,11 @@ export class Logger
     {
         this.log_filepath = log_filepath;
         this.log_level = log_level;
+
+        const logDir = path.dirname(this.log_filepath);
+        if (!fs.existsSync(logDir)) {
+            fs.mkdirSync(logDir, { recursive: true });
+        }
 
         this.logger = winston.createLogger
         (

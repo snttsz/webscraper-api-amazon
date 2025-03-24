@@ -1,0 +1,137 @@
+openapi: 3.0.0
+info:
+  title: Amazon Scraper API
+  description: API Serverless para capturar e armazenar os produtos mais vendidos da Amazon.
+  version: 1.0.0
+servers:
+  - url: https://5p7ew83tf7.execute-api.sa-east-1.amazonaws.com/dev
+    description: API Gateway Serverless (Troque {api-id} pelo ID real)
+
+paths:
+  /departamentos:
+    get:
+      summary: Lista todos os departamentos disponíveis
+      operationId: listarDepartamentos
+      tags:
+        - Departamentos
+      responses:
+        '200':
+          description: Lista de departamentos disponíveis
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                      example: 1
+                    nome:
+                      type: string
+                      example: Eletrônicos
+        '500':
+          description: Erro interno ao listar os departamentos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Erro ao listar departamentos: <mensagem de erro>"
+
+  /mais-vendidos:
+    get:
+      summary: Retorna os produtos mais vendidos da página principal
+      operationId: listarMaisVendidos
+      tags:
+        - Produtos
+      responses:
+        '200':
+          description: Lista dos produtos mais vendidos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                      example: 101
+                    nome:
+                      type: string
+                      example: "Smartphone X"
+                    preco:
+                      type: number
+                      example: 2999.99
+                    url:
+                      type: string
+                      example: "https://amazon.com/produto"
+        '500':
+          description: Erro interno ao listar os mais vendidos
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Erro ao listar mais vendidos: <mensagem de erro>"
+
+  /mais-vendidos/{id_departamento}:
+    get:
+      summary: Retorna os produtos mais vendidos de um departamento específico
+      operationId: listarMaisVendidosPorDepartamento
+      tags:
+        - Produtos
+      parameters:
+        - name: id_departamento
+          in: path
+          required: true
+          schema:
+            type: number
+          description: ID do departamento desejado
+      responses:
+        '200':
+          description: Lista dos produtos mais vendidos do departamento selecionado
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                      example: 201
+                    nome:
+                      type: string
+                      example: "Notebook Gamer"
+                    preco:
+                      type: number
+                      example: 7999.99
+                    url:
+                      type: string
+                      example: "https://amazon.com/notebook"
+        '400':
+          description: ID do departamento não informado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "ID do departamento é obrigatório."
+        '500':
+          description: Erro interno ao buscar produtos do departamento
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Erro ao listar mais vendidos por departamento: <mensagem de erro>"
