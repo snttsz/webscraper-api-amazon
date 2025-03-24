@@ -6,7 +6,8 @@ import { PastaPai } from '../DAO/produtoDAO';
 dotenv.config();
 
 /**
- * Class description
+ * Classe responsável por realizar o scraping de dados do site Amazon.
+ * Utiliza o Puppeteer para navegar na página e extrair informações sobre produtos e departamentos.
  */
 export class AmazonScraper 
 {
@@ -16,11 +17,9 @@ export class AmazonScraper
     private page : Page | null = null
 
     /**
+     * Construtor da classe `AmazonScraper`.
      * 
-     * 
-     * @param
-     * @param 
-     * @returns 
+     * @param targetUrl URL de base do site para o qual as requisições de scraping serão feitas.
      */
     constructor(targetUrl: string)
     {
@@ -28,11 +27,10 @@ export class AmazonScraper
     }   
 
     /**
+     * Inicia o navegador Puppeteer.
+     * Cria uma instância de `browser` e `page`.
      * 
-     * 
-     * @param
-     * @param 
-     * @returns 
+     * @returns Promise que resolve quando o browser for iniciado.
      */
     public async iniciarBrowser()
     {
@@ -46,11 +44,9 @@ export class AmazonScraper
     }
 
     /**
+     * Finaliza o navegador Puppeteer.
      * 
-     * 
-     * @param
-     * @param 
-     * @returns 
+     * @returns Promise que resolve quando o browser for fechado.
      */
     public async finalizarBrowser()
     {
@@ -61,11 +57,10 @@ export class AmazonScraper
     }
 
     /**
+     * Realiza o scraping das opções de menu de departamentos da Amazon.
      * 
-     * 
-     * @param
-     * @param 
-     * @returns 
+     * @param url URL adicional para acessar a página de departamentos.
+     * @returns Uma lista de strings representando as opções de menu dos departamentos.
      */
     public async scrape_menu_opcoes(url: string) : Promise<string[]>
     {
@@ -102,11 +97,11 @@ export class AmazonScraper
     }
 
     /**
+     * Retorna o `href` do departamento com base no ID.
      * 
-     * 
-     * @param
-     * @param 
-     * @returns 
+     * @param departments Lista de departamentos extraída da página.
+     * @param id ID do departamento.
+     * @returns O `href` do departamento ou `null` se não encontrado.
      */
     private getOpcaoHref(departments: string[], id: string) : string | null
     {
@@ -120,11 +115,13 @@ export class AmazonScraper
     }
 
     /**
+     * Realiza o scraping de uma página de produtos da Amazon.
      * 
-     * 
-     * @param
-     * @param 
-     * @returns 
+     * @param url URL da página a ser acessada.
+     * @param selector Seletor CSS para localizar os produtos na página.
+     * @param tipo_tabela Tipo de tabela pai, usado para identificar o tipo de página.
+     * @param id_tabela ID da tabela pai.
+     * @returns Lista de strings contendo os detalhes dos produtos encontrados.
      */
     public async scrape(url: string, selector: string, tipo_tabela: string | null, id_tabela : string) : Promise<string[]>
     {
@@ -162,11 +159,10 @@ export class AmazonScraper
     }
 
     /**
+     * Realiza o scraping da página inicial da Amazon.
      * 
-     * 
-     * @param
-     * @param 
-     * @returns 
+     * @param url URL da página de início.
+     * @returns Lista de produtos encontrados na página inicial.
      */
     public async scrape_pagina_inicial(url: string) : Promise<string[]>
     {
@@ -181,11 +177,12 @@ export class AmazonScraper
     }
 
     /**
+     * Realiza o scraping das páginas redirecionadas a partir dos links dos departamentos.
      * 
-     * 
-     * @param
-     * @param 
-     * @returns 
+     * @param lista_com_links Lista de links dos departamentos.
+     * @param id_do_link ID do link que será seguido.
+     * @param tipo_tabela Tipo de tabela pai (página inicial ou departamento).
+     * @returns Lista de produtos encontrados nas páginas redirecionadas.
      */
     public async scrape_paginas_redirecionadas(lista_com_links: string[], id_do_link: string, tipo_tabela: string) : Promise<string[]>
     {

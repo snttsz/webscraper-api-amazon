@@ -4,12 +4,18 @@ import { DynamoDB } from 'aws-sdk';
 
 import { Logger } from '../utils/logger';
 
+/**
+ * Enum que define os tipos de categorias de produtos.
+ */
 export enum PastaPai
 {
     PAGINA_INICIAL = "Página Inicial",
     DEPARTAMENTO = "Departamento"
 }
 
+/**
+ * Interface que representa um produto no sistema.
+ */
 export interface Produto
 {
     id : number,
@@ -20,14 +26,15 @@ export interface Produto
     id_tabela_pai : string
 };
 
+/**
+ * Classe de acesso a dados (DAO) para a entidade Produto.
+ * Estende a classe genérica DAO para operações com a tabela de produtos no DynamoDB.
+ */
 export class ProdutoDAO extends DAO<Produto>
 {
     /**
-     * 
-     * 
-     * @param
-     * @param 
-     * @returns 
+     * Construtor da classe ProdutoDAO.
+     * @param log Instância do logger para registrar operações.
      */
     constructor(log: Logger) 
     {
@@ -35,11 +42,8 @@ export class ProdutoDAO extends DAO<Produto>
     }
 
     /**
-     * 
-     * 
-     * @param
-     * @param 
-     * @returns 
+     * Cria um novo produto e o adiciona ao banco de dados.
+     * @param produto Objeto do tipo Produto a ser adicionado.
      */
     async create(produto: Produto): Promise<void> 
     {
@@ -65,11 +69,9 @@ export class ProdutoDAO extends DAO<Produto>
     }
 
     /**
-     * 
-     * 
-     * @param
-     * @param 
-     * @returns 
+     * Atualiza os detalhes de um produto existente no banco de dados.
+     * @param id Identificador do produto a ser atualizado.
+     * @param updatedProduct Objeto contendo os novos dados do produto.
      */
     async update(id: string, updatedProduct: Produto): Promise<void> 
     {
@@ -103,10 +105,10 @@ export class ProdutoDAO extends DAO<Produto>
     }
 
     /**
-     * Retorna os produtos de um determinado departamento.
-     * 
-     * @param idDepartamento O ID do departamento para filtrar os produtos.
-     * @returns Lista de produtos do departamento.
+     * Obtém uma lista de produtos de um departamento específico.
+     * @param idDepartamento ID do departamento para o qual deseja buscar produtos.
+     * @param tipoDepartamento Tipo de departamento (página inicial ou departamento específico).
+     * @returns Uma lista de produtos pertencentes ao departamento informado.
      */
     async getProdutosByDepartamento(idDepartamento: string, tipoDepartamento: string): Promise<Produto[]> 
     {

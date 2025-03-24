@@ -3,6 +3,9 @@ import { DAO } from './DAO';
 import { DynamoDB } from 'aws-sdk';
 import { Logger } from '../utils/logger';
 
+/**
+ * Interface que define a estrutura de um departamento.
+ */
 export interface Departamento
 {
     id : number,
@@ -10,26 +13,24 @@ export interface Departamento
     href : string
 };
 
+/**
+ * Classe responsável pelo acesso e manipulação de dados da tabela "Departamento" no DynamoDB.
+ */
 export class DepartamentoDAO extends DAO<Departamento>
 {
     /**
-     * 
-     * 
-     * @param
-     * @param 
-     * @returns 
+     * Construtor da classe DepartamentoDAO.
+     * @param log Instância do Logger para registro de eventos e erros.
      */
     constructor(log: Logger) 
     {
         super('Departamento', log);
     }
 
-    /**
-     * 
-     * 
-     * @param
-     * @param 
-     * @returns 
+     /**
+     * Método para criar um novo departamento na tabela do DynamoDB.
+     * @param departamento Objeto do tipo Departamento a ser adicionado.
+     * @returns Promise<void> indicando a conclusão da operação.
      */
     async create(departamento: Departamento): Promise<void> 
     {
@@ -53,11 +54,10 @@ export class DepartamentoDAO extends DAO<Departamento>
     }
 
     /**
-     * 
-     * 
-     * @param
-     * @param 
-     * @returns 
+     * Método para atualizar um departamento existente no DynamoDB.
+     * @param id ID do departamento a ser atualizado.
+     * @param updatedDepartment Objeto contendo os novos dados do departamento.
+     * @returns Promise<void> indicando a conclusão da operação.
      */
     async update(id: string, updatedDepartment: Departamento): Promise<void> 
     {

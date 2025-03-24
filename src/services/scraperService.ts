@@ -9,6 +9,12 @@ import { Logger } from '../utils/logger';
 
 dotenv.config();
 
+/**
+ * Classe responsável por orquestrar a raspagem de dados da web e salvamento no banco de dados.
+ * 
+ * Ela inicializa o scraper da Amazon, o manipulador de banco de dados e o logger, 
+ * e depois realiza o processo de raspagem e salvamento de dados de maneira sequencial.
+ */
 class ScraperService
 {
     private webscraper : AmazonScraper | null = null;
@@ -16,11 +22,10 @@ class ScraperService
     private log : Logger | null = null;
 
     /**
+     * Construtor da classe ScraperService.
+     * Inicializa as instâncias necessárias do scraper, do banco de dados e do logger.
      * 
-     * 
-     * @param
-     * @param 
-     * @returns 
+     * @throws Se algum dos objetos não for inicializado corretamente.
      */
     constructor()
     {
@@ -31,11 +36,15 @@ class ScraperService
     }
 
     /**
+     * Método que executa a raspagem de dados e os salva no banco de dados.
      * 
+     * Este método realiza os seguintes passos:
+     * 1. Cria as tabelas de produtos e departamentos no banco de dados, se não existirem.
+     * 2. Inicia o browser e realiza a raspagem de produtos da página principal.
+     * 3. Realiza a raspagem e o salvamento dos departamentos.
+     * 4. Para cada departamento, realiza a raspagem dos três produtos mais vendidos e os salva no banco.
      * 
-     * @param
-     * @param 
-     * @returns 
+     * @throws Se ocorrer algum erro durante o processo de raspagem ou salvamento.
      */
     public async scrape_and_save() : Promise<void>
     {

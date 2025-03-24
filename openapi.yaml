@@ -5,133 +5,115 @@ info:
   version: 1.0.0
 servers:
   - url: https://5p7ew83tf7.execute-api.sa-east-1.amazonaws.com/dev
-    description: API Gateway Serverless (Troque {api-id} pelo ID real)
+    description: API Gateway Serverless
 
 paths:
   /departamentos:
     get:
-      summary: Lista todos os departamentos disponíveis
-      operationId: listarDepartamentos
+      summary: Listar Departamentos
       tags:
         - Departamentos
+      description: Retorna uma lista de todos os departamentos armazenados no banco de dados.
       responses:
         '200':
-          description: Lista de departamentos disponíveis
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: number
-                      example: 1
-                    nome:
-                      type: string
-                      example: Eletrônicos
-        '500':
-          description: Erro interno ao listar os departamentos
+          description: Sucesso
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  error:
-                    type: string
-                    example: "Erro ao listar departamentos: <mensagem de erro>"
+                  statusCode:
+                    type: integer
+                  body:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        nome:
+                          type: string
+                        href:
+                          type: string
+        '500':
+          description: Erro no servidor
 
-  /mais-vendidos:
+  /produtos:
     get:
-      summary: Retorna os produtos mais vendidos da página principal
-      operationId: listarMaisVendidos
+      summary: Listar Produtos Mais Vendidos
       tags:
         - Produtos
+      description: Retorna a lista de produtos mais vendidos em todos os departamentos.
       responses:
         '200':
-          description: Lista dos produtos mais vendidos
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: number
-                      example: 101
-                    nome:
-                      type: string
-                      example: "Smartphone X"
-                    preco:
-                      type: number
-                      example: 2999.99
-                    url:
-                      type: string
-                      example: "https://amazon.com/produto"
-        '500':
-          description: Erro interno ao listar os mais vendidos
+          description: Sucesso
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  error:
-                    type: string
-                    example: "Erro ao listar mais vendidos: <mensagem de erro>"
+                  statusCode:
+                    type: integer
+                  body:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        nome:
+                          type: string
+                        preco:
+                          type: string
+                        estrelas:
+                          type: string
+                        tipo_tabela_pai:
+                          type: string
+                        id_tabela_pai:
+                          type: string
+        '500':
+          description: Erro no servidor
 
-  /mais-vendidos/{id_departamento}:
+  /departamentos/{id_departamento}:
     get:
-      summary: Retorna os produtos mais vendidos de um departamento específico
-      operationId: listarMaisVendidosPorDepartamento
+      summary: Listar Produtos Mais Vendidos por Departamento
       tags:
-        - Produtos
+        - Departamentos
+      description: Retorna os produtos mais vendidos de um departamento específico.
       parameters:
         - name: id_departamento
           in: path
           required: true
           schema:
-            type: number
-          description: ID do departamento desejado
+            type: string
       responses:
         '200':
-          description: Lista dos produtos mais vendidos do departamento selecionado
+          description: Sucesso
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: number
-                      example: 201
-                    nome:
-                      type: string
-                      example: "Notebook Gamer"
-                    preco:
-                      type: number
-                      example: 7999.99
-                    url:
-                      type: string
-                      example: "https://amazon.com/notebook"
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                  body:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        nome:
+                          type: string
+                        preco:
+                          type: string
+                        estrelas:
+                          type: string
+                        tipo_tabela_pai:
+                          type: string
+                        id_tabela_pai:
+                          type: string
         '400':
-          description: ID do departamento não informado
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "ID do departamento é obrigatório."
+          description: ID do departamento ausente
         '500':
-          description: Erro interno ao buscar produtos do departamento
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "Erro ao listar mais vendidos por departamento: <mensagem de erro>"
+          description: Erro no servidor

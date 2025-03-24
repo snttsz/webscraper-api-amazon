@@ -5,17 +5,18 @@ import { ProdutoDAO, Produto } from '../DAO/produtoDAO';
 
 import { Logger } from '../utils/logger';
 
+/**
+ * Classe responsável por gerenciar as operações do banco de dados para os departamentos e produtos.
+ */
 export class DatabaseHandler
 {
     private departamentoDAO : DepartamentoDAO | null = null;
     private produtoDao : ProdutoDAO | null = null;
 
     /**
+     * Construtor da classe DatabaseHandler.
      * 
-     * 
-     * @param
-     * @param 
-     * @returns 
+     * @param log Instância do Logger para registrar eventos e erros.
      */
     constructor(log: Logger)
     {
@@ -24,11 +25,9 @@ export class DatabaseHandler
     }
 
     /**
+     * Retorna a instância do DAO de produtos.
      * 
-     * 
-     * @param
-     * @param 
-     * @returns 
+     * @returns Instância de ProdutoDAO ou null se não estiver inicializada.
      */
     public getProdutoTable() : ProdutoDAO | null
     {
@@ -36,11 +35,9 @@ export class DatabaseHandler
     }
 
     /**
+     * Retorna a instância do DAO de departamentos.
      * 
-     * 
-     * @param
-     * @param 
-     * @returns 
+     * @returns Instância de DepartamentoDAO ou null se não estiver inicializada.
      */
     public getDepartamentoTable() : DepartamentoDAO | null
     {   
@@ -48,11 +45,11 @@ export class DatabaseHandler
     }
 
     /**
+     * Converte uma lista de strings em objetos Produto.
      * 
-     * 
-     * @param
-     * @param 
-     * @returns 
+     * @param lista Lista de strings representando produtos no formato "nome:::preco:::estrelas:::tipo_tabela_pai:::id_tabela_pai".
+     * @param departamento_nome Nome do departamento ao qual os produtos pertencem (opcional).
+     * @returns Lista de objetos Produto.
      */
     public parseProdutos(lista: string[], departamento_nome : string = "") : Produto[]
     {
@@ -71,11 +68,10 @@ export class DatabaseHandler
     }
 
     /**
+     * Converte uma lista de strings em objetos Departamento.
      * 
-     * 
-     * @param
-     * @param 
-     * @returns 
+     * @param lista Lista de strings representando departamentos no formato "href:::nome:::id".
+     * @returns Lista de objetos Departamento.
      */
     public parseDepartamentos(lista: string[]) : Departamento[]
     {
