@@ -62,7 +62,7 @@ export class DatabaseHandler
                 preco : preco, 
                 estrelas : estrelas,
                 tipo_tabela_pai : `${tipo_tabela_pai} : ${departamento_nome}`,
-                id_tabela_pai : id_tabela_pai !== "null" ? id_tabela_pai : "Página Inicial - Sem ID"
+                id_tabela_pai : id_tabela_pai !== "null" ? parseInt(id_tabela_pai) : -1
             };
         });
     }

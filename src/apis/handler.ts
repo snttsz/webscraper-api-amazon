@@ -53,7 +53,7 @@ export const listarMaisVendidos: APIGatewayProxyHandler = async () =>
 {
     try
     {
-        const produtos = await databasehandler.getProdutoTable()?.getProdutosByDepartamento("-1", PastaPai.PAGINA_INICIAL);
+        const produtos = await databasehandler.getProdutoTable()?.getProdutosByDepartamento(-1, PastaPai.PAGINA_INICIAL);
 
         return {
             statusCode : 200,
@@ -88,7 +88,7 @@ export const listarMaisVendidosPorDepartamento: APIGatewayProxyHandler = async (
             };
         }
 
-        const produtos = await databasehandler.getProdutoTable()?.getProdutosByDepartamento(idDepartamento, PastaPai.DEPARTAMENTO);
+        const produtos = await databasehandler.getProdutoTable()?.getProdutosByDepartamento(parseInt(idDepartamento), PastaPai.DEPARTAMENTO);
 
         return {
             statusCode : 200,

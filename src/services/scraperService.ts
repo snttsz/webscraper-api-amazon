@@ -86,7 +86,10 @@ class ScraperService
             //  Envia produtos da página principal para o BD
             //
             let produtos : string[] = await this.webscraper.scrape_pagina_inicial("/bestsellers");
+            console.log(await this.databaseHandler.getProdutoTable()?.list())
             await this.databaseHandler.getProdutoTable()?.create_from_list(this.databaseHandler.parseProdutos(produtos));
+
+
 
             //
             //  Envia Departamentos para o BD

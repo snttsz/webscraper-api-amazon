@@ -45,3 +45,16 @@ Antes de rodar o projeto, você precisará de:
 3. **Criação de Tabelas no DynamoDB**:
 
    O scraper cria automaticamente as tabelas `Produto` e `Departamento` no DynamoDB durante a execução.
+
+## Executando o Scraper
+
+1. **Compile os módulos para javascript usando o comando tsc ou npx tsc**:
+   ```
+   tsc src/services/scraper.ts
+   ```
+
+   ```
+   npx tsc src/services/scraper.ts
+   ```
+
+2. **Agora é só executar o arquivo. O arquivo scraper.ts já está configurado para gerar as tabelas nos bancos de dados e executar o scraper na Amazon, além de salvar os dados no banco de dados.**

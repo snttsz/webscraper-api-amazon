@@ -23,7 +23,7 @@ export interface Produto
     preco : string,
     estrelas : string,
     tipo_tabela_pai : string,
-    id_tabela_pai : string
+    id_tabela_pai : number
 };
 
 /**
@@ -110,13 +110,13 @@ export class ProdutoDAO extends DAO<Produto>
      * @param tipoDepartamento Tipo de departamento (página inicial ou departamento específico).
      * @returns Uma lista de produtos pertencentes ao departamento informado.
      */
-    async getProdutosByDepartamento(idDepartamento: string, tipoDepartamento: string): Promise<Produto[]> 
+    async getProdutosByDepartamento(idDepartamento: number, tipoDepartamento: string): Promise<Produto[]> 
     {
         try 
         {
             if (tipoDepartamento === PastaPai.PAGINA_INICIAL)
             {
-                idDepartamento = "Página Inicial - Sem ID";
+                idDepartamento = -1;
             }
 
             const params: DynamoDB.DocumentClient.ScanInput = {
